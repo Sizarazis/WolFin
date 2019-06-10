@@ -1,0 +1,2 @@
+# WolFin
+Just an idea.
