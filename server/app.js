@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var unirest = require('unirest');
 
 var indexRouter = require('./routes/index');
 
@@ -21,19 +22,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 
-
-// START OF TEMPLATE CODE FROM ...
+// TEMPLATED FROM:
 // https://dev.to/nburgess/creating-a-react-app-with-react-router-and-an-express-backend-33l3
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/')));
 
 // An api endpoint that returns a short list of items
-app.get('/api/getList', (req,res) => {
-    var list = ["item1", "item2", "item3"];
+app.get('/api/:symbol', (req,res) => {
+    var list = ["item1", "item2", "item3"]; 
+    var stock = req.params.symbol;
     res.json(list);
-    console.log('Sent list of items');
+    console.log("Sent list of items");
+
+
+    //TODO: PARSE THIS INFO AND SEND A MESSAGE BACK
+    unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-detail?region=US&lang=en&symbol=" + stock)
+    .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
+    .header("X-RapidAPI-Key", "PRIVATE KEY")
+    .end(function (result) {
+
+      console.log(result.status, result.headers, result.body);
+    });
 });
+
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
@@ -44,8 +56,6 @@ const port = process.env.PORT || 5000;
 app.listen(port);
 
 console.log('App is listening on port ' + port);
-// END OF TEMPLATE CODE
-
 
 
 // catch 404 and forward to error handler

@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 
-class List extends Component {
+class Stock extends Component {
     // Initialize the state
     constructor(props){
         super(props);
         this.state = {
+            symbol: this.props.location.pathname,
             list: []
         }
     }
 
     // Fetch the list on first mount
     componentDidMount() {
-        this.getList();
+        this.getStock();
     }
 
     // Retrieves the list of items from the Express app
-    getList = () => {
-        fetch('/api/getList')
+    getStock = () => {
+        fetch('/api/' + this.state.symbol) 
             .then(res => res.json())
             .then(list => this.setState({ list }))
     }
@@ -50,4 +51,9 @@ class List extends Component {
     }
 }
 
-export default List;
+export default Stock;
+
+/*
+LOADING CSS:
+<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+*/
