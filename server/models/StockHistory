@@ -1,0 +1,9 @@
+class StockHistory {
+
+    constructor(historyData) {
+        this.test = "test";
+        //result.body.chart.result[0].indicators.quote[0].close[0];
+    }
+}
+
+module.exports.StockHistory = StockHistory;
