@@ -1,8 +1,0 @@
-class StockSummary {
-
-    constructor(summaryData) {
-        this.test = "test";
-    }
-}
-
-module.exports.StockSummary = StockSummary;

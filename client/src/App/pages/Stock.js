@@ -6,54 +6,43 @@ class Stock extends Component {
         super(props);
         this.state = {
             symbol: this.props.location.pathname,
-            list: []
+            response: []
         }
     }
 
-    // Fetch the list on first mount
+    // Fetch the stock info on first mount
     componentDidMount() {
         this.getStock();
     }
 
-    // Retrieves the list of items from the Express app
+    // Retrieves the stock data from the Express app
     getStock = () => {
         fetch('/api/' + this.state.symbol) 
             .then(res => res.json())
-            .then(list => this.setState({ list }))
-    }
+            .then(response => this.setState({ response }), "unfulfilled")
+        }
 
     render() {
-        const { list } = this.state;
+        const symbol  = this.state.symbol.substring(1, this.state.symbol.length);
+        const response = this.state.response;
 
-        return (
+        if (response.length == 0) {
+            return (
+                <div className="App">
+                    <h1>{ symbol }</h1>
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
+            );
+        }
+        else return (
             <div className="App">
-                <h1>List of Items</h1>
-                {/* Check to see if any items are found*/}
-                {list.length ? (
-                    <div>
-                        {/* Render the list of items */}
-                        {list.map((item) => {
-                            return(
-                                <div>
-                                    {item}
-                                </div>
-                            );
-                        })}
-                    </div>
-                ) : (
-                    <div>
-                        <h2>No List Items Found</h2>
-                    </div>
-                )
-                }
+                <h1>{ symbol }</h1>
+                <div> 
+                    <p>{ JSON.stringify(response) }</p>
+                </div>
             </div>
         );
     }
 }
 
 export default Stock;
-
-/*
-LOADING CSS:
-<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-*/
