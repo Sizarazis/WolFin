@@ -53,7 +53,7 @@ app.get('/api/:symbol', function(req,res) {
     return new Promise(function(resolve, reject) { 
       unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=" + stock)
       .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-      .header("X-RapidAPI-Key", "PRIVATE KEY")
+      .header("X-RapidAPI-Key", "PRIVATE")
       .end(function (result) {
         console.log(result.status, "Received summary response from Yahoo API.");
 
@@ -75,7 +75,7 @@ app.get('/api/:symbol', function(req,res) {
     return new Promise(function(resolve, reject) {
       unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts?comparisons=%5EGDAXI%2C%5EFCHI&region=US&lang=en&symbol=" + stock + "&interval=" + interval + "&range=" +  range)
       .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-      .header("X-RapidAPI-Key", "PRIVATE KEY")
+      .header("X-RapidAPI-Key", "PRIVATE")
       .end(function (result) {
         console.log(result.status, "Received history response from Yahoo API.");
 

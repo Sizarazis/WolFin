@@ -2,8 +2,8 @@ class StockSummary {
 
     constructor(summaryData) {
         try {
-            this.profile = summaryData.body.profile;
-            this.details = summaryData.body.details;
+            this.profile = summaryData.body.summaryProfile;
+            this.details = summaryData.body.summaryDetail;
             this.financialData = summaryData.body.financialData;
         }
         catch(e) {
