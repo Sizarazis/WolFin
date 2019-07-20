@@ -36,6 +36,7 @@ class App extends Component {
   render() {
     const App = () => (
       <div>
+       <style>{'body { background-color: #fbfbfb; }'}</style>
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/*' component={Stock}/>

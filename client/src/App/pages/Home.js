@@ -20,11 +20,15 @@ class Home extends Component {
     }
 
     render() {
+      var header = <div class="header">
+                    <h1>WolFin</h1>
+                    <p>A simple stock predictor using AWS machine learning tools.</p>
+                  </div>;
+      var footer = <div class="footer1"><br/></div>;
+
         return (
         <div className="App">
-            <h1>WolFin</h1>
-            <p>A simple stock predictor using AWS machine learning tools.</p>
-            <br/>
+            { header }
             <h5>Enter a symbol traded on the NYSE.</h5>
             {/* Input field for stock symbols */}
             <input type="text" placeholder="e.g. MSFT" onChange={this.handleChange}>
@@ -35,6 +39,7 @@ class Home extends Component {
                     Go
                 </button>
             </Link>
+            { footer }
         </div>
     );
     }
