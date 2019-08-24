@@ -23,7 +23,7 @@ Provide a prediction of the closing stock price for the next day (5 days?)
 1. Make a basic Node.js project with Express and React. (complete)
 2. Connect to the Yahoo Finance API. (basic cases work/needs error handling)
 3. Provide a basic front-end (complete, but I should remove superfluous stuff)
-4. AWS: Learn the needed AWS machine learning stuff--using deepAR forecasting with sagemaker on historical stock market data
+4. AWS: Learn the needed AWS machine learning stuff--using deepAR forecasting with sagemaker on historical stock market data (in-progress)
 5. AWS: Prepare data for training
 6. AWS: Train data
 7. AWS: Model data
