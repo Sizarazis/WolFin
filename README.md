@@ -10,31 +10,24 @@ Provides filters so that companies I don't want to support aren't suggested (Oil
 
 ### Why?
 I want to learn more about the stock market and start an investment portfolio.  </br>
-I think this would be a good project to learn more about the stock market and Microsoft's Azure machine learning tools.  </br>
+I think this would be a good project to learn more about the stock market and AWS tools.  </br>
+It will be a nice intro to machine learning and possibly deep-learning. </br>
 It will hopefully refresh my memory on REST concepts, JavaScript, Node, Express, and React.  </br>
 
 
 ### The Ideal
-Buy: Run algorithm every day on all the public listings and provide a score from 0-100 on whether to buy.  </br>
-Sell: Run algorithm every day on all of your owned stocks and provide a score from 0-100 on whether to sell.  </br>
+Provide a prediction of the closing stock price for the next day (5 days?)
 
 
 ### Implementation
-1. Make a basic Node.js project with Express and React.
-2. Connect to the Yahoo Finance API.
-3. Build a system to categorize and display the API data.
-4. Machine learning stuff!!!
-5. ...
-6. Profit!
-
-
-### Thoughts
-The AI needs to learn from previous stock market data. (this will be hard and a big learning experience for me on how to apply machine learning to a data set)  </br>
-This could be a really complicated project so I need to hone in on an achievable base first.  </br>
-It would be cool to use natural language processing to have an AI judge how articles about a company would effect its stock price. (But that seems like a huge endeavor).  </br>
-Don't get down on myself if it doesn't work well. It won't. This is a learning experience.  </br>
-
-
-### Reading List
-- The Intelligent Investor - Benjamin Graham
-- Business Adventures - John Brooks
+1. Make a basic Node.js project with Express and React. (complete)
+2. Connect to the Yahoo Finance API. (basic cases work/needs error handling)
+3. Provide a basic front-end (complete, but I should remove superfluous stuff)
+4. AWS: Learn the needed AWS machine learning stuff--using deepAR forecasting with sagemaker on historical stock market data
+5. AWS: Prepare data for training
+6. AWS: Train data
+7. AWS: Model data
+8. AWS: Test data
+9. AWS: Deploy data
+10. Connect the AWS machine learning deployment to my web application
+11. Pretty the front-end up
