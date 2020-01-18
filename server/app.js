@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var unirest = require('unirest');
+var request = require('request');
 
 var indexRouter = require('./routes/index');
 var StockSummary = require('./models/StockSummary').StockSummary;
@@ -33,64 +34,49 @@ app.use(express.static(path.join(__dirname, 'client/')));
 // An api endpoint that returns info on a public company
 app.get('/api/:symbol', function(req,res) {
   var stock = req.params.symbol;
-  var response = new Array(2);
+  var response = new Array(3);
+  var requester = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  console.log("New request from: ",  requester);
+  console.log("Requesting...", stock);
 
-  getSummaryData(stock).then(function(summary) {
+  // get company summary data
+  const p1 = getSummaryData(stock);
+  p1.then(function(summary) {
     response[0] = summary;
-    console.log("summary set.");
-  }).then(getHistoryData(stock, "5m", "1d").then(function(history) {
+  }, function(error) {
+    //TODO: HANDLE ERRORS FOR getSummaryData
+    console.log("Error occurred in getSummaryData...", error);
+  });
+
+  // get historical stock data
+  const p2 = getHistoryData(stock, "1d", "5y");
+  p2.then(function(history) {
     response[1] = history;
-    console.log("history set.");
-  })).then(function() {
-    res.json(response);
-    console.log("response sent.");
-    }
-  )});
+  }, function(error) {
+    console.log("Error occured in getHistoryData...", error);
+  });
 
+  Promise.all([p1, p2]).then(function(values) {
+    // get next day's prediction
+    getAWSresponse(response[1]).then(function(prediction) {
+      response[2] = prediction;
+      console.log("Prediction recieved: " + response[2])
 
-  // Request Summary Data from Yahoo Finance API
-  function getSummaryData(stock) {
-    return new Promise(function(resolve, reject) { 
-      unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=" + stock)
-      .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-      .header("X-RapidAPI-Key", "PRIVATE")
-      .end(function (result) {
-        console.log(result.status, "Received summary response from Yahoo API.");
+      // send all the data to the client
+      console.log("Sending response for..." + stock + ", to..." + requester);
+      res.json(response);
+    },
+    function(error) {
+        //TODO: HANDLE ERRORS FOR getAWSresponse
+        res.json(["error", "error", "error"]);
+        console.log("Error occurred in getAWSresponse...", error);
+    });
+  }).catch(error => { 
+    res.json(["error", "error", "error"]);
+    console.error("Error occured in retrieving the company's information...", error);
+  })
+});
 
-        var tempSummary = result;
-
-        if (result.status == 200) {
-          summary = new StockSummary(tempSummary);
-          resolve(summary);
-        }
-        else {
-          reject(Error(result.status));
-        }
-      })
-    })
-  }
-
-  // Request Historical Data from Yahoo Finance API
-  function getHistoryData(stock, interval, range) {
-    return new Promise(function(resolve, reject) {
-      unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts?comparisons=%5EGDAXI%2C%5EFCHI&region=US&lang=en&symbol=" + stock + "&interval=" + interval + "&range=" +  range)
-      .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-      .header("X-RapidAPI-Key", "PRIVATE")
-      .end(function (result) {
-        console.log(result.status, "Received history response from Yahoo API.");
-
-        var tempHistory = result;
-
-        if (result.status < 400) {
-          history = new StockHistory(tempHistory);
-          resolve(history)
-        }
-        else {
-          reject(Error(result.status));
-        }
-      })
-    })
-  }
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
@@ -120,3 +106,115 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+
+// TODO: set timeout
+// Request Summary Data from Yahoo Finance API
+function getSummaryData(stock) {
+  return new Promise(function(resolve, reject) { 
+    unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=" + stock)
+    .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
+    .header("X-RapidAPI-Key", "PRIVATE KEY")
+    .end(function (result) {
+      console.log(result.status, "Received summary response from Yahoo Finance API (via RapidAPI).");
+
+      var tempSummary = result;
+
+      if (result.status < 400 && result.body != null) {
+        summary = new StockSummary(tempSummary);
+        //console.log("SUMMARY RESOLVED");
+        resolve(summary);
+      }
+      else {
+        //console.log("SUMMARY REJECTED");
+        reject(Error(result.status));
+      }
+    })
+  })
+}
+
+// TODO: set timeout
+// Request Historical Data from Yahoo Finance API
+function getHistoryData(stock, interval, range) {
+  return new Promise(function(resolve, reject) {
+    unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts?comparisons=%5EGDAXI%2C%5EFCHI&region=US&lang=en&symbol=" + stock + "&interval=" + interval + "&range=" +  range)
+    .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
+    .header("X-RapidAPI-Key", "PRIVATE KEY")
+    .end(function (result) {
+      console.log(result.status, "Received history response from Yahoo Finance API (via RapidAPI).");
+      //console.log(result.body);
+
+      if (result.status < 400 && result.body.chart.result != null) {
+        //console.log("HISTORY RESOLVED");
+        resolve(new StockHistory(result));
+      }
+      else {
+        //console.log("HISTORY REJECTED");
+        reject(Error(result));
+      }
+    })
+  })
+}
+
+//TODO: set timeout
+//TODO: Test promise fulfillment
+// Contacts the AWS server to get the next day's prediction for the stock
+function getAWSresponse(historyData) {
+  return new Promise(function(resolve, reject) {
+    try {
+      var formattedData = prepareHistoryRequest(historyData);
+      
+      request.post({ 
+        headers: {'content-type' : 'application/json', 'accept' : 'application/json'}, 
+        url: 'PRIVATE URL', 
+        body: JSON.stringify(formattedData) }, 
+        function(error, res, body){
+          console.log(res.statusCode, "Recieved prediction response from WolFin AWS endpoint.");
+          //console.log("body: " + body);
+          //console.log("response: " + res);
+          //console.log("error: " + error);
+
+          if (typeof res.body != "number") {
+            //console.log("type: ", typeof res.body);
+            //console.log("AWS REJECTED");
+            reject(Error(res.body));
+          }
+          else {
+            var prediction = body;
+            //console.log("AWS RESOLVED");
+            resolve(prediction);
+          }
+      });
+    } catch(error) {
+      reject(Error(error));
+    }
+  });
+}
+
+// Parses the history response from the Yahoo Finance API into the required format for the AWS body.
+function prepareHistoryRequest(historyData) {
+  var indicators = historyData.body.chart.result[0].indicators.adjclose[0].adjclose;
+
+  var epoch = historyData.body.chart.result[0].timestamp[0];
+  var date = new Date(epoch * 1000);
+
+  var months = { Jan:'01', Feb:'02', Mar:'03', Apr:'04', May:'05', Jun:'06', Jul:'07', Aug:'08', Sep:'09', Oct:'10', Nov:'11', Dec:'12' }
+  var split = date.toString().split(" ");
+  
+  var year = split[3];
+  var month = split[1];
+  var day = split[2];
+  var time = split[4];
+
+  var goodDate = year + "-" + months[month] + "-" + day + " " + time;
+
+  //NOTE: I should test the epoch multiplication thing. Seems a bit wonky.
+  //I want: 2019-12-04 06:30:00
+  // console.log("epoch: " + epoch);
+  // console.log("Updated date: " + goodDate);
+  
+  var formattedData = {"instances": [{"start": goodDate, "target": indicators}]};
+  // console.log(formattedData)
+  
+  return formattedData;
+}

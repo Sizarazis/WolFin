@@ -1,9 +1,10 @@
 # imports
+import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-driver = webdriver.Chrome("chromedriver")
+driver = webdriver.Chrome("./chromedriver")
 
 
 # Special thanks to eoddata.com and finance.yahoo.com, because I'm crawling their stuff
@@ -101,10 +102,29 @@ for key in symbols:
     entry["dynamic_feat"] = dynamic_feat
     entries.append(entry)
 
-# TODO: Export jsonlines file
-# NOTE: for whatever reason the new lines don't take on the file, so remember to replace all in visual studio code
-f = open("history.json", "w+")
-for item in entries:
-    item_m = str(item).replace("'", "\"").replace("]},", "]}")
-    f.write(item_m)
-f.close()
+# Export to json file
+
+# Slice the data into train and test data (70%/30%)
+slicer = round(0.7 * len(entries)-1)
+slicer = int(slicer)
+
+train_data = entries[0:slicer]
+test_data = entries[slicer:]
+
+# Append predictions for the test data
+#prediction_length = 1
+#for item in test_data:
+#    for num in range(0, prediction_length):
+#        item["target"].append(None)
+#        item["dynamic_feat"][0].append(None)
+
+# Store the train and test data locally on this server
+def write_list_to_file(path, data):
+    with open(path, 'wb') as fp:
+        for d in data:
+            fp.write(json.dumps(d).encode("utf-8"))
+            fp.write("\n".encode("utf-8"))
+
+
+write_list_to_file("train_data.json", train_data)
+write_list_to_file("test_data.json", test_data)

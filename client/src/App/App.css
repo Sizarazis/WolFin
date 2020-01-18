@@ -125,92 +125,10 @@
 }
 
 /* FOOTER */
-.footer1 {
+.footer {
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 100px;
   background-color: #626362;
-}
-
-.footer2 {
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  height: 100px;
-  background-color: #626362;
-}
-
-/* COMPANY INFO (TABLE) */
-.StockPageLayoutGroup {
-  border-style: none none solid none;
-  border-width: 5px;
-  border-color: #626362;
-  border-spacing: 0px;
-  width: 100%;
-}
-
-.StockPageLayoutGroup .td1 {
-  padding: 5px;
-  text-align: left;
-  border-style: none solid none none;
-  border-width: 5px;
-  border-color: #626362;
-}
-
-.StockPageLayoutGroup .h5-contact {
-  margin-bottom: 5px;
-  text-align: center;
-}
-
-/*GENERAL INFO (SECTION) */
-.genInfo {
-  display: inline;
-}
-
-.genInfo .h4 {
-  margin-left: 0px;
-}
-
-/* GENERAL INFO (TABLE) */
-.genInfoTable {
-  width: 100%;
-  line-height: 20px;
-  padding: 0px;
-  font-size: 14px;
-  text-align:left;
-}
-
-.genInfoTable .col1 {
-  width: 40%;
-  text-align: top;
-}
-
-.genInfoTable .col2 {
-  width: 60%;
-}
-
-/* CONTACT INFO (TABLE) */
-.contactInfoTable {
-  width: 100%;
-  padding: 0px;
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
-}
-
-.contactInfoTable td {
-  font-weight: 400;
-  font-size: 10px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-  margin-top: 0px;
-  text-align: center;
-}
-
-.contactInfoTable .col1 {
-  width: 100%;
-  text-align: top;
-  text-align: center;
 }

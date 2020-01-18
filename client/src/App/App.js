@@ -33,10 +33,39 @@ import Stock from './pages/Stock';
 
 class App extends Component {
 
+  //TODO
+  displayHeader() {
+    return (
+        <div class="header">
+            <h1>WolFin</h1>
+            <p>A simple stock predictor.</p>
+        </div>
+    );
+  }
+
+  //TODO
+  displayMenuBar() {
+      return (
+          <div className="menubar">
+          </div>
+      );
+  }
+
+  //TODO
+  displayFooter() {
+      return (
+          <div className="footer">
+          </div>
+      );
+  }
+
   render() {
     const App = () => (
       <div>
-       <style>{'body { background-color: #fbfbfb; }'}</style>
+        <div> { this.displayHeader() } </div>
+        <div> { this.displayMenuBar() } </div>
+        <div> { this.displayFooter() } </div>
+        <style>{'body { background-color: #fbfbfb; }'}</style>
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/*' component={Stock}/>
