@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import App from '../App.js';
-
 
 class Home extends Component {
     constructor(props) {
@@ -28,7 +26,7 @@ class Home extends Component {
             {/* Input field for stock symbols */}
           <input type="text" placeholder="e.g. MSFT" onChange={this.handleChange}></input>
             {/* Link to List.js */}
-          <Link to={'./' + this.state.symbol}><button variant="raised">Go</button></Link>
+          <Link to={'./predictor/' + this.state.symbol}><button variant="raised">Go</button></Link>
         </div>
       );
     }

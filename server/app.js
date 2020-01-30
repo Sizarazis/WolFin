@@ -32,7 +32,7 @@ app.use('/', indexRouter);
 app.use(express.static(path.join(__dirname, 'client/')));
 
 // An api endpoint that returns info on a public company
-app.get('/api/:symbol', function(req,res) {
+app.get('/api/predictor/:symbol', function(req,res) {
   var stock = req.params.symbol;
   var response = new Array(3);
   var requester = req.header('x-forwarded-for') || req.connection.remoteAddress;
@@ -44,7 +44,6 @@ app.get('/api/:symbol', function(req,res) {
   p1.then(function(summary) {
     response[0] = summary;
   }, function(error) {
-    //TODO: HANDLE ERRORS FOR getSummaryData
     console.log("Error occurred in getSummaryData...", error);
   });
 
@@ -72,8 +71,9 @@ app.get('/api/:symbol', function(req,res) {
         console.log("Error occurred in getAWSresponse...", error);
     });
   }).catch(error => { 
+    //TODO: HANDLE ERRORS FOR YAHOO FINANCE RAPIDAPI CALLS
     res.json(["error", "error", "error"]);
-    console.error("Error occured in retrieving the company's information...", error);
+    //console.error("Error occured in retrieving the company's information...", error);
   })
 });
 
@@ -157,7 +157,6 @@ function getHistoryData(stock, interval, range) {
 }
 
 //TODO: set timeout
-//TODO: Test promise fulfillment
 // Contacts the AWS server to get the next day's prediction for the stock
 function getAWSresponse(historyData) {
   return new Promise(function(resolve, reject) {
@@ -170,12 +169,10 @@ function getAWSresponse(historyData) {
         body: JSON.stringify(formattedData) }, 
         function(error, res, body){
           console.log(res.statusCode, "Recieved prediction response from WolFin AWS endpoint.");
-          //console.log("body: " + body);
-          //console.log("response: " + res);
+          //console.log("body: " + body.includes("errorMessage"));
           //console.log("error: " + error);
 
-          if (typeof res.body != "number") {
-            //console.log("type: ", typeof res.body);
+          if (res.statusCode >= 400 || body.includes("errorMessage")) {
             //console.log("AWS REJECTED");
             reject(Error(res.body));
           }

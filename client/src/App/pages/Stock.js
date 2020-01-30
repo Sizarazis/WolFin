@@ -5,9 +5,11 @@ class Stock extends Component {
     constructor(props){
         super(props);
         this.state = {
-            symbol: this.props.location.pathname.toUpperCase(),
+            symbol: this.props.location.pathname.toUpperCase().substring(11),
             response: []
         }
+
+        this.displayContent = this.displayContent.bind(this);
     }
 
     // Fetch the stock info on first mount
@@ -17,9 +19,15 @@ class Stock extends Component {
 
     // Display result content
     displayContent() {
+        var lastEntry = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose.length - 1;
+        var previousAdjClose = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose[lastEntry];
+
         return (
             // I should display the stock symbol and current price here
             <div class="content">
+                <h3>{ this.state.symbol }</h3>
+                <p>Today's Adjusted Close: { previousAdjClose } </p>
+                <p>Tomorrow's Predicted Adjusted Close: { this.state.response[2] }</p>
             </div>
         );
     }
@@ -38,13 +46,13 @@ class Stock extends Component {
 
     // Retrieves the stock data from the Express app
     getStock = () => {
-        fetch('/api/' + this.state.symbol) 
+        fetch('/api/predictor/' + this.state.symbol) 
             .then(res => res.json())
             .then(response => this.setState({ response }), "unfulfilled")
         }
 
     render() {
-        const symbol  = this.state.symbol.substring(1, this.state.symbol.length);
+        const symbol  = this.state.symbol;
         const response = this.state.response;
         var content = <div></div>;
 
@@ -57,7 +65,7 @@ class Stock extends Component {
                 </div>;
         }
         //TODO: Display error screen
-        else if (response[0] == "error") {
+        else if (response[0] === "error") {
             content = 
                 <div className="error">
                     <h3>ERROR</h3>

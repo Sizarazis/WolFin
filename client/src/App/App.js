@@ -1,44 +1,20 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Stock from './pages/Stock';
+import About from './pages/About';
 
 class App extends Component {
 
   //TODO
   displayHeader() {
     return (
-        <div class="header">
+        <div className="header">
+          <div className="header-icon-image">
             <h1>WolFin</h1>
             <p>A simple stock predictor.</p>
+          </div>
         </div>
     );
   }
@@ -47,6 +23,12 @@ class App extends Component {
   displayMenuBar() {
       return (
           <div className="menubar">
+            <table>
+              <tr>
+                <td><Link to={'../'}>Home</Link></td>
+                <td><Link to={'../About'}>About</Link></td>
+              </tr>
+            </table>
           </div>
       );
   }
@@ -55,6 +37,9 @@ class App extends Component {
   displayFooter() {
       return (
           <div className="footer">
+            <div className="topBorder"></div>
+            <p>Contact: srazis@yahoo.com</p>
+            <p>Development: github.com/Sizarazis/WolFin</p>
           </div>
       );
   }
@@ -65,10 +50,12 @@ class App extends Component {
         <div> { this.displayHeader() } </div>
         <div> { this.displayMenuBar() } </div>
         <div> { this.displayFooter() } </div>
-        <style>{'body { background-color: #fbfbfb; }'}</style>
+        <br/>
+        <style>{'body { background-color: #f5f9ff; }'}</style>
         <Switch>
           <Route exact path='/' component={Home}/>
-          <Route path='/*' component={Stock}/>
+          <Route exact path='/About' component={About}/>
+          <Route exact path='/predictor/*' component={Stock}/>
         </Switch>
       </div>
     )

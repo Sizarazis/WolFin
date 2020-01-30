@@ -1,6 +1,6 @@
 /* BODY */
 .body {
-  background-color: #fbfbfb;
+  background-color: #f5f9ff;
 }
 
 /* MAIN APPLICATION */
@@ -9,7 +9,7 @@
   height: 100%;
   bottom: 0;
   text-align: center;
-  background-color: #fbfbfb;
+  background-color: #f5f9ff;
 }
 
 .App-logo {
@@ -102,27 +102,67 @@
 
 /* HEADER */
 .header {
-  padding: 10px;
-  
+  padding: 1%;
+  height: 3em;
   text-align: center;
-  background: #626362;
+  background: #18427b;
   color: white;
-  font-size: 20px;
+  font-size: 200%;
+}
+
+.header img {
+  width: 18em;
+  height: 5em;
+  position: relative;
+  right: 0;
+  top: 0;
+
 }
 
 .header h1 {
-  line-height: 10px;
   text-align: center;
   color: white;
-  font-size: 35px;
+  font-size: 1.2em;
 }
 
 .header p {
-  line-height: 15px;
-  text-align: center;
   color: white;
-  font-size: 15px;
+  position: relative;
+  font-size: 0.5em;
+  text-align: center;
+  bottom: 20px;
 }
+
+/* MENU BAR */
+.menubar {
+  position: fixed;
+  width: 100%;
+  height: 2em;
+  background: #6e92a2;
+  color: white;
+  font-size: 100%;
+}
+
+.menubar table {
+  margin: auto;
+  width: 70%;
+}
+
+.menubar tr {
+
+}
+
+.menubar td {
+  text-align: center;
+  vertical-align: center;
+}
+
+.menubar a {
+  color: white;
+}
+
+/* CONTENT */
+
 
 /* FOOTER */
 .footer {
@@ -130,5 +170,17 @@
   bottom: 0;
   width: 100%;
   height: 100px;
-  background-color: #626362;
+  background-color: #18427b;
+}
+
+.footer .topBorder {
+  top: 0;
+  height: 0.15em;
+  width: 100%;
+  background-color: #6e92a2
+}
+
+.footer p {
+  text-align: center;
+  color: white;
 }
