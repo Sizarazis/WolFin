@@ -18,25 +18,23 @@ class Home extends Component {
       });
     }
 
-    //TODO: displays content
     displayContent() {
       return (
-        <div>
-          <h5>Enter a symbol traded on the NYSE.</h5>
+        <span>
+          <br/>
+          <p className="Instructions">Enter a symbol traded on the NYSE.</p>
             {/* Input field for stock symbols */}
-          <input type="text" placeholder="e.g. MSFT" onChange={this.handleChange}></input>
+          <input className="symbolInputBox" type="text" placeholder="e.g. MSFT" onChange={this.handleChange}></input>
             {/* Link to List.js */}
-          <Link to={'./predictor/' + this.state.symbol}><button variant="raised">Go</button></Link>
-        </div>
+          <Link to={'./predictor/' + this.state.symbol}><button className="symbolButton"><span className="symbolInputText">Go</span></button></Link>
+        </span>
       );
     }
 
     render() {
-      var content = <div> { this.displayContent() } </div>;
-
       return (
-        <div className="App">
-            { content }
+        <div className="Home">
+            { this.displayContent() }
         </div>
     );
   }

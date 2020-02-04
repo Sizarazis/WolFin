@@ -3,13 +3,14 @@
   background-color: #f5f9ff;
 }
 
+
 /* MAIN APPLICATION */
 .App {
   width: 100%;
   height: 100%;
   bottom: 0;
   text-align: center;
-  background-color: #f5f9ff;
+  background-color: #414141;
 }
 
 .App-logo {
@@ -19,7 +20,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #414141;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,6 +33,7 @@
 .App-link {
   color: #61dafb;
 }
+
 
 /* LOADING ANIMATION */
 /* From Loading.io */
@@ -56,7 +58,7 @@
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #000;
+  background: white;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .lds-ellipsis div:nth-child(1) {
@@ -100,12 +102,16 @@
   }
 }
 
+
 /* HEADER */
 .header {
-  padding: 1%;
-  height: 3em;
+  display: block;
+  width: 100%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  height: 2.5em;
   text-align: center;
-  background: #18427b;
+  background: #282828;
   color: white;
   font-size: 200%;
 }
@@ -120,48 +126,163 @@
 }
 
 .header h1 {
+  margin: 0 auto;
   text-align: center;
+  padding-top: 1px;
   color: white;
   font-size: 1.2em;
 }
 
 .header p {
+  vertical-align: middle;
+  margin: 0 auto;
   color: white;
-  position: relative;
   font-size: 0.5em;
   text-align: center;
   bottom: 20px;
 }
 
+
 /* MENU BAR */
 .menubar {
-  position: fixed;
+  display: block;
+  position: relative;
   width: 100%;
-  height: 2em;
-  background: #6e92a2;
+  height: 2.5em;
+  background: #282828;
   color: white;
   font-size: 100%;
 }
 
+.menubar .delineator {
+  position: relative;
+  margin: auto;
+  height: 1px;
+  width: 95%;
+  background-color: #414141;
+}
+
 .menubar table {
+  vertical-align: middle;
+  padding-top: 0.3em;
   margin: auto;
   width: 70%;
 }
 
-.menubar tr {
-
-}
-
 .menubar td {
   text-align: center;
-  vertical-align: center;
 }
 
 .menubar a {
   color: white;
+  text-transform: uppercase;
+  font-weight: 525;
 }
 
+.menubar a:hover {
+  color: lightgrey;
+}
+
+.menubar a:link, a:visited, a:active, a:focus {
+  text-decoration: none;
+}
+
+.menubar .currentLink::after {
+  content: "";
+  display: flex;
+  position: absolute;
+  flex-wrap: nowrap;
+  margin: auto;
+  margin-top: 0.2em;
+  position: inherit;
+  background-color: grey;
+  width: 12%;
+  height: 0.05em;
+}
+
+
 /* CONTENT */
+/* Home */
+.Home {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.Home h3 {
+  color: white;
+}
+
+.Home .Instructions {
+  color: white;
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.Home .symbolInputBox {
+  padding: 0.5em 1em 0.5em 0.5em;
+  margin-right: 0.5em;
+  border: none;
+  border-radius: 0.1em;
+}
+
+.Home .symbolInputText {
+  color: #282828;
+  font-weight: 550;
+  font-size: 1.1em;
+}
+
+.Home .symbolButton {
+  background-color: white;
+  padding: 0.4em 1em 0.5em 1em;
+  border: none;
+  margin: auto;
+}
+
+.Home .symbolButton:hover {
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,0.24), 0 5px 5px 0 rgba(0,0,0,0.19);
+}
+
+.Home .symbolButton:active {
+  background-color: lightgrey;
+}
+
+/* Stock */
+.Stock h3 {
+  color: white;
+}
+
+/* loading */
+.loading p {
+  color: white;
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+/* error */
+.error h3 {
+  color: white;
+}
+
+/* About */
+.About {
+  display: block;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.About h2 {
+  margin-top: 0;
+  color: white;
+}
+
+.About p, h3, h4, h5, h6 {
+  color: white;
+}
+
 
 
 /* FOOTER */
@@ -169,18 +290,29 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
-  background-color: #18427b;
+  height: 80px;
+  background-color: #414141;
 }
 
-.footer .topBorder {
-  top: 0;
-  height: 0.15em;
+.footer .delineator {
+  position: relative;
+  margin: auto;
+  height: 1px;
+  width: 70%;
+  background-color: grey;
+}
+
+.footer .text {
+  display: block;
   width: 100%;
-  background-color: #6e92a2
+  bottom: 15px;
+  position: absolute;
 }
 
 .footer p {
   text-align: center;
   color: white;
+  font-size: 0.8em;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }

@@ -24,7 +24,7 @@ class Stock extends Component {
 
         return (
             // I should display the stock symbol and current price here
-            <div class="content">
+            <div className="Stock">
                 <h3>{ this.state.symbol }</h3>
                 <p>Today's Adjusted Close: { previousAdjClose } </p>
                 <p>Tomorrow's Predicted Adjusted Close: { this.state.response[2] }</p>
@@ -60,7 +60,7 @@ class Stock extends Component {
         if (response.length === 0) {
             content = 
                 <div className="loading">
-                    <h3>{ symbol }</h3>
+                    <p>Querying { symbol }</p>
                     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                 </div>;
         }
@@ -77,7 +77,7 @@ class Stock extends Component {
                 <div>{ this.displayContent() }</div>;
         }
         return (
-            <div className="App">
+            <div>
                 { content }
             </div>
         );

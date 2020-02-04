@@ -5,18 +5,18 @@ class About extends Component {
     //TODO: displays content
     displayContent() {
       return (
-        <div>
+        <span>
           <h2>About</h2>
           <p>This is text that will explain what the project is about.</p>
-        </div>
+        </span>
       );
     }
 
     render() {
-      var content = <div> { this.displayContent() } </div>;
+      var content = <span> { this.displayContent() } </span>;
 
       return (
-        <div className="App">
+        <div className="About">
             { content }
         </div>
     );
