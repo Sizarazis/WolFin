@@ -21,15 +21,48 @@ class Stock extends Component {
     displayContent() {
         var lastEntry = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose.length - 1;
         var previousAdjClose = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose[lastEntry];
+        var upTick = this.state.response[2] >= previousAdjClose;
 
-        return (
-            // I should display the stock symbol and current price here
+        var content = <div></div>;
+        
+        if (upTick) {
+            content = 
             <div className="Stock">
-                <h3>{ this.state.symbol }</h3>
-                <p>Today's Adjusted Close: { previousAdjClose } </p>
-                <p>Tomorrow's Predicted Adjusted Close: { this.state.response[2] }</p>
+                <h3>{ this.state.response[0].longName } ({ this.state.symbol })</h3>
+                <div className="delineator"></div>
+                <br/>
+                <table className="predictionTable">
+                    <tr>
+                        <td><span><p>LAST CLOSE (USD)</p></span></td>
+                        <td><span><p>PREDICTED CLOSE (USD)</p></span></td>
+                    </tr>
+                    <tr>
+                        <td className="lastClose">{ Math.round(previousAdjClose * 100)/100 }</td>
+                        <td className="upPrediction">{ Math.round(this.state.response[2] * 100)/100 }</td>
+                    </tr>
+                </table>
+            </div>;
+        }
+        else {
+            content = 
+            <div className="Stock">
+                <h3>{ this.state.response[0].longName } ({ this.state.symbol })</h3>
+                <div className="delineator"></div>
+                <br/>
+                <table className="predictionTable">
+                    <tr>
+                        <td><span><p>LAST CLOSE (USD)</p></span></td>
+                        <td><span><p>PREDICTED CLOSE (USD)</p></span></td>
+                    </tr>
+                    <tr>
+                        <td className="lastClose">{ Math.round(previousAdjClose * 100)/100 }</td>
+                        <td className="downPrediction">{ Math.round(this.state.response[2] * 100)/100 }</td>
+                    </tr>
+                </table>
             </div>
-        );
+        }
+
+        return content;
     }
 
     displayCompanyName() {
@@ -78,6 +111,7 @@ class Stock extends Component {
         }
         return (
             <div>
+                <br/>
                 { content }
             </div>
         );

@@ -27,6 +27,12 @@ class Home extends Component {
           <input className="symbolInputBox" type="text" placeholder="e.g. MSFT" onChange={this.handleChange}></input>
             {/* Link to List.js */}
           <Link to={'./predictor/' + this.state.symbol}><button className="symbolButton"><span className="symbolInputText">Go</span></button></Link>
+          <br/>
+          <br/>
+          <p className="warning">Please note: The algorithm used to compute the prediction for the next closing price is solely based
+            on the last 10 years of historical closing data. Thus, the algorithm does not take into account
+            the vast majority of factors that determine actual stock prices. So, please do not use this tool to 
+            advise in your investments.</p>
         </span>
       );
     }

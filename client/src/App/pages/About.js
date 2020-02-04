@@ -3,11 +3,40 @@ import React, { Component } from 'react';
 class About extends Component {
 
     //TODO: displays content
+    // What do I want to write here?
+    //  - Overview
+    //  - Limitations
+    //  - Tools used
+    //  - Links
+    //  - Acknowledgements
+    //  - 
     displayContent() {
       return (
         <span>
+          <br/>
           <h2>About</h2>
-          <p>This is text that will explain what the project is about.</p>
+          <table className="aboutTable">
+            <tr>
+              <td className="aboutHeader">Overview</td>
+              <td className="aboutText">Lorem ipsem blah blah blah</td>
+            </tr>
+            <tr>
+              <td className="aboutHeader">Limitations</td>
+              <td className="aboutText">Lorem ipsem blah blah blah</td>
+            </tr>
+            <tr>
+              <td className="aboutHeader">Tools</td>
+              <td className="aboutText">Lorem ipsem blah blah blah</td>
+            </tr>
+            <tr>
+              <td className="aboutHeader">Acknowledgements</td>
+              <td className="aboutText">Lorem ipsem blah blah blah</td>
+            </tr>
+            <tr>
+              <td className="aboutHeader">Links</td>
+              <td className="aboutText">Lorem ipsem blah blah blah</td>
+            </tr>
+          </table>
         </span>
       );
     }

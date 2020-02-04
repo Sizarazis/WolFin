@@ -116,15 +116,6 @@
   font-size: 200%;
 }
 
-.header img {
-  width: 18em;
-  height: 5em;
-  position: relative;
-  right: 0;
-  top: 0;
-
-}
-
 .header h1 {
   margin: 0 auto;
   text-align: center;
@@ -165,7 +156,7 @@
 .menubar table {
   vertical-align: middle;
   padding-top: 0.3em;
-  margin: auto;
+  margin: 0 auto;
   width: 70%;
 }
 
@@ -218,7 +209,7 @@
 .Home .Instructions {
   color: white;
   font-weight: 500;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .Home .symbolInputBox {
@@ -249,9 +240,59 @@
   background-color: lightgrey;
 }
 
+.Home .warning {
+  color: white;
+  width: 50%;
+  margin: auto;
+  display: block;
+  padding-top: 2em;
+  font-weight: 200;
+  font-size: 0.8em;
+}
+
 /* Stock */
 .Stock h3 {
   color: white;
+  font-size: 1.5em;
+}
+
+.Stock .delineator {
+  position: relative;
+  margin: auto;
+  height: 1px;
+  width: 50%;
+  background-color: grey;
+}
+
+.Stock .predictionTable {
+  vertical-align: top;
+  padding: 0em 0em 0em 0em;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.Stock .predictionTable p {
+  color: white;
+}
+
+.Stock .predictionTable .lastClose {
+  font-weight: 800;
+  font-size: 3em;
+  color: white;
+}
+
+.Stock .predictionTable .downPrediction {
+  top: 0;
+  font-weight: 800;
+  font-size: 3em;
+  color: red;
+}
+
+.Stock .predictionTable .upPrediction {
+  top: 0;
+  font-weight: 800;
+  font-size: 3em;
+  color: green;
 }
 
 /* loading */
@@ -283,6 +324,24 @@
   color: white;
 }
 
+.About .aboutTable {
+  margin: 0 auto;
+  text-align: left;
+}
+
+.About .aboutTable .aboutHeader {
+  color: white;
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.About .aboutTable .aboutText {
+  color: white;
+  font-weight: 300;
+  font-size: 0.9em;
+  padding-left: 4em;
+  padding-bottom: 1em;
+}
 
 
 /* FOOTER */
@@ -312,6 +371,7 @@
 .footer p {
   text-align: center;
   color: white;
+  font-weight: 200;
   font-size: 0.8em;
   margin-top: 1px;
   margin-bottom: 1px;
