@@ -25,28 +25,34 @@ class App extends Component {
       case '/':
         menubar = 
         <table>
-          <tr>
-            <td><Link class="currentLink" to={'../'}>Home</Link></td>
-            <td><Link to={'../About'}>About</Link></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td><Link className="currentLink" to={'../'}>Home</Link></td>
+              <td><Link to={'../About'}>About</Link></td>
+            </tr>
+          </tbody>
         </table>
         break;
       case '/About':
         menubar = 
         <table>
-          <tr>
-            <td><Link to={'../'}>Home</Link></td>
-            <td><Link class="currentLink" to={'../About'}>About</Link></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td><Link to={'../'}>Home</Link></td>
+              <td><Link className="currentLink" to={'../About'}>About</Link></td>
+            </tr>
+          </tbody>
         </table>
         break;
       default:
         menubar = 
         <table>
-          <tr>
-            <td><Link to={'../'}>Home</Link></td>
-            <td><Link to={'../About'}>About</Link></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td><Link to={'../'}>Home</Link></td>
+              <td><Link to={'../About'}>About</Link></td>
+            </tr>
+          </tbody>
         </table>
         break;
     }

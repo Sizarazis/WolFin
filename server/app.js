@@ -52,7 +52,7 @@ app.get('/api/predictor/:symbol', function(req,res) {
   p2.then(function(history) {
     response[1] = history;
   }, function(error) {
-    console.log("Error occured in getHistoryData...", error);
+    console.log("Error occured in getHistoryData...", error.json().toString());
   });
 
   Promise.all([p1, p2]).then(function(values) {
@@ -67,13 +67,13 @@ app.get('/api/predictor/:symbol', function(req,res) {
     },
     function(error) {
         //TODO: HANDLE ERRORS FOR getAWSresponse
-        res.json(["error", "error", "error"]);
+        res.json(["error", "Failed to connect to the AWS endpoint."]);
         console.log("Error occurred in getAWSresponse...", error);
     });
   }).catch(error => { 
     //TODO: HANDLE ERRORS FOR YAHOO FINANCE RAPIDAPI CALLS
-    res.json(["error", "error", "error"]);
-    //console.error("Error occured in retrieving the company's information...", error);
+    res.json(["error", "Failed to retrieve the stock's information from the Yahoo Finance API."]);
+    console.error("Error occured in retrieving the company's information...", error.json().toString());
   })
 });
 
@@ -127,7 +127,7 @@ function getSummaryData(stock) {
       }
       else {
         //console.log("SUMMARY REJECTED");
-        reject(Error(result.status));
+        reject(Error(result));
       }
     })
   })
@@ -190,7 +190,7 @@ function getAWSresponse(historyData) {
 
 // Parses the history response from the Yahoo Finance API into the required format for the AWS body.
 function prepareHistoryRequest(historyData) {
-  var indicators = historyData.body.chart.result[0].indicators.adjclose[0].adjclose;
+  var indicators = historyData.body.chart.result[0].indicators.quote[0].close;
 
   var epoch = historyData.body.chart.result[0].timestamp[0];
   var date = new Date(epoch * 1000);
@@ -211,7 +211,7 @@ function prepareHistoryRequest(historyData) {
   // console.log("Updated date: " + goodDate);
   
   var formattedData = {"instances": [{"start": goodDate, "target": indicators}]};
-  // console.log(formattedData)
+  //console.log(formattedData)
   
   return formattedData;
 }

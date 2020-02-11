@@ -307,6 +307,10 @@
   color: white;
 }
 
+.error p {
+  color: white;
+}
+
 /* About */
 .About {
   display: block;
@@ -330,12 +334,17 @@
 }
 
 .About .aboutTable .aboutHeader {
+  width: 20%;
+  vertical-align: top;
+  text-align: right;
   color: white;
   font-weight: 500;
   font-size: 1.1em;
 }
 
 .About .aboutTable .aboutText {
+  width: 80%;
+  padding-right: 20%;
   color: white;
   font-weight: 300;
   font-size: 0.9em;

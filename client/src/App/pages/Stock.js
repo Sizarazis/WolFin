@@ -5,16 +5,48 @@ class Stock extends Component {
     constructor(props){
         super(props);
         this.state = {
+            state: "loading",
             symbol: this.props.location.pathname.toUpperCase().substring(11),
             response: []
         }
-
+ 
         this.displayContent = this.displayContent.bind(this);
     }
 
     // Fetch the stock info on first mount
     componentDidMount() {
-        this.getStock();
+        this.timeoutPromise(10000, fetch('/api/predictor/' + this.state.symbol))
+        .then(res => {
+            console.log(res);
+            if (res[0] === "error") {
+                this.setState({ state:"error", response:res[1] })
+            }
+            else {
+                this.setState({ state:"fulfilled", response:res });
+            }  
+        })
+        .catch(error => {
+            this.setState({ state:"error", response:error });
+        });
+    }
+
+    timeoutPromise(ms, promise) {
+        return new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+            reject(new Error("Timed out."))
+          }, ms);
+
+          promise.then(
+            (res) => {
+                clearTimeout(timeoutId);
+                resolve(res.json());
+            },
+            (err) => {
+                clearTimeout(timeoutId);
+                reject(err.json());
+            }
+          );
+        })
     }
 
     // Display result content
@@ -77,31 +109,25 @@ class Stock extends Component {
         )
     }
 
-    // Retrieves the stock data from the Express app
-    getStock = () => {
-        fetch('/api/predictor/' + this.state.symbol) 
-            .then(res => res.json())
-            .then(response => this.setState({ response }), "unfulfilled")
-        }
-
     render() {
         const symbol  = this.state.symbol;
-        const response = this.state.response;
         var content = <div></div>;
+        console.log(this.state.state);
 
         // Display loading screen
-        if (response.length === 0) {
+        if (this.state.state === "loading") {
             content = 
                 <div className="loading">
                     <p>Querying { symbol }</p>
-                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                    <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                 </div>;
         }
         //TODO: Display error screen
-        else if (response[0] === "error") {
+        else if (this.state.state === "error") {
             content = 
                 <div className="error">
                     <h3>ERROR</h3>
+                    <p> { this.state.response } </p>
                 </div>
         }
         // Display result
