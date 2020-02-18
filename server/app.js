@@ -27,32 +27,23 @@ app.use('/', indexRouter);
 
 // TEMPLATED FROM:
 // https://dev.to/nburgess/creating-a-react-app-with-react-router-and-an-express-backend-33l3
-
-var allowedOrigins = ['http://localhost:5000',
-                      'http://localhost:3001',
-                      'http://0.0.0.0:5000',
-                      'http://wolfin.org'];
-
-app.use(cors({
-  origin: function(origin, callback){    // allow requests with no origin 
-    // (like mobile apps or curl requests)
-    if(!origin) {
-      return callback(null, true);  
-    }  
-    if(allowedOrigins.indexOf(origin) === -1){
-      var msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }    
-    return callback(null, true);
+var whitelist = ['http://wolfin.org', 'http://0.0.0.0:5000', 'http://localhost:5000', 'http://localhost:3001']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
   }
-}));
+}
+
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/')));
 
 // An api endpoint that returns info on a public company
-app.get('/api/predictor/:symbol', function(req,res,next) {
+app.get('/api/predictor/:symbol', cors(corsOptions), function(req,res,next) {
   var stock = req.params.symbol;
   var response = new Array(3);
   var requester = req.header('x-forwarded-for') || req.connection.remoteAddress;
