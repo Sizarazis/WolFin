@@ -28,18 +28,18 @@ class App extends Component {
           <tbody>
             <tr>
               <td><Link className="currentLink" to={'../'}>Home</Link></td>
-              <td><Link to={'../About'}>About</Link></td>
+              <td><Link to={'../about'}>About</Link></td>
             </tr>
           </tbody>
         </table>
         break;
-      case '/About':
+      case '/about':
         menubar = 
         <table>
           <tbody>
             <tr>
               <td><Link to={'../'}>Home</Link></td>
-              <td><Link className="currentLink" to={'../About'}>About</Link></td>
+              <td><Link className="currentLink" to={'../about'}>About</Link></td>
             </tr>
           </tbody>
         </table>
@@ -50,7 +50,7 @@ class App extends Component {
           <tbody>
             <tr>
               <td><Link to={'../'}>Home</Link></td>
-              <td><Link to={'../About'}>About</Link></td>
+              <td><Link to={'../about'}>About</Link></td>
             </tr>
           </tbody>
         </table>
@@ -85,7 +85,7 @@ class App extends Component {
         <style>{'body { background-color: #414141; }'}</style>
         <Switch>
           <Route exact path='/' component={Home}/>
-          <Route exact path='/About' component={About}/>
+          <Route exact path='/about' component={About}/>
           <Route exact path='/predictor/*' component={Stock}/>
         </Switch>
         <div className="footer"> { this.displayFooter() } </div>

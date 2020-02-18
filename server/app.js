@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var unirest = require('unirest');
 var request = require('request');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var StockSummary = require('./models/StockSummary').StockSummary;
@@ -24,19 +25,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
-
 // TEMPLATED FROM:
 // https://dev.to/nburgess/creating-a-react-app-with-react-router-and-an-express-backend-33l3
+
+var allowedOrigins = ['http://localhost:5000',
+                      'http://localhost:3001',
+                      'http://0.0.0.0:5000',
+                      'http://wolfin.org'];
+
+app.use(cors({
+  origin: function(origin, callback){    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+    if(!origin) {
+      return callback(null, true);  
+    }  
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }    
+    return callback(null, true);
+  }
+}));
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/')));
 
 // An api endpoint that returns info on a public company
-app.get('/api/predictor/:symbol', function(req,res) {
+app.get('/api/predictor/:symbol', function(req,res,next) {
   var stock = req.params.symbol;
   var response = new Array(3);
   var requester = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  console.log("New request from: ",  requester);
+  console.log("\nNew request from: ",  requester);
   console.log("Requesting...", stock);
 
   // get company summary data
@@ -77,44 +97,13 @@ app.get('/api/predictor/:symbol', function(req,res) {
   })
 });
 
-
-// Handles any requests that don't match the ones above
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/public/index.html'));
-});
-
-const port = process.env.PORT || 5000;
-app.listen(port);
-
-console.log('App is listening on port ' + port);
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
-
-
 // TODO: set timeout
 // Request Summary Data from Yahoo Finance API
 function getSummaryData(stock) {
   return new Promise(function(resolve, reject) { 
     unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=" + stock)
     .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-    .header("X-RapidAPI-Key", "PRIVATE KEY")
+    .header("X-RapidAPI-Key", "PRIVATE")
     .end(function (result) {
       console.log(result.status, "Received summary response from Yahoo Finance API (via RapidAPI).");
 
@@ -139,7 +128,7 @@ function getHistoryData(stock, interval, range) {
   return new Promise(function(resolve, reject) {
     unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-charts?comparisons=%5EGDAXI%2C%5EFCHI&region=US&lang=en&symbol=" + stock + "&interval=" + interval + "&range=" +  range)
     .header("X-RapidAPI-Host", "apidojo-yahoo-finance-v1.p.rapidapi.com")
-    .header("X-RapidAPI-Key", "PRIVATE KEY")
+    .header("X-RapidAPI-Key", "PRIVATE")
     .end(function (result) {
       console.log(result.status, "Received history response from Yahoo Finance API (via RapidAPI).");
       //console.log(result.body);
@@ -165,7 +154,7 @@ function getAWSresponse(historyData) {
       
       request.post({ 
         headers: {'content-type' : 'application/json', 'accept' : 'application/json'}, 
-        url: 'PRIVATE URL', 
+        url: 'PRIVATE', 
         body: JSON.stringify(formattedData) }, 
         function(error, res, body){
           console.log(res.statusCode, "Recieved prediction response from WolFin AWS endpoint.");
@@ -215,3 +204,32 @@ function prepareHistoryRequest(historyData) {
   
   return formattedData;
 }
+
+// Handles any requests that don't match the ones above
+app.get('*', (req,res,next) =>{
+  res.sendFile(path.join(__dirname+'/client/public/index.html'));
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port);
+
+console.log('App is listening on port ' + port);
+
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+// set locals, only providing error in development
+res.locals.message = err.message;
+res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+// render the error page
+res.status(err.status || 500);
+res.render('error');
+});
+
+module.exports = app;

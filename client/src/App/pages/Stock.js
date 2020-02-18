@@ -15,7 +15,8 @@ class Stock extends Component {
 
     // Fetch the stock info on first mount
     componentDidMount() {
-        this.timeoutPromise(10000, fetch('/api/predictor/' + this.state.symbol))
+        console.log(this.state.symbol);
+        this.timeoutPromise(10000, fetch('http://localhost:3000/api/predictor/' + this.state.symbol, {}))
         .then(res => {
             console.log(res);
             if (res[0] === "error") {
@@ -26,7 +27,7 @@ class Stock extends Component {
             }  
         })
         .catch(error => {
-            this.setState({ state:"error", response:error });
+            this.setState({ state:"error", response:error.toString() });
         });
     }
 
@@ -43,7 +44,7 @@ class Stock extends Component {
             },
             (err) => {
                 clearTimeout(timeoutId);
-                reject(err.json());
+                reject(err.toString());
             }
           );
         })
@@ -51,9 +52,18 @@ class Stock extends Component {
 
     // Display result content
     displayContent() {
-        var lastEntry = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose.length - 1;
-        var previousAdjClose = this.state.response[1].body.chart.result[0].indicators.adjclose[0].adjclose[lastEntry];
-        var upTick = this.state.response[2] >= previousAdjClose;
+        //NOTE: test this code in the mornings before the closing price for the day is set. There might be a bug.
+        var lastClosePos = -1;
+        var closes = this.state.response[1].body.chart.result[0].indicators.quote[0].close;
+        for(var i=1; i<closes.length; i++) {
+            if (closes[closes.length - i] !== 0 && closes[closes.length - i] !== null) {
+                lastClosePos = closes.length - i;
+                break;
+            }
+        }
+
+        var lastClose = this.state.response[1].body.chart.result[0].indicators.quote[0].close[lastClosePos];
+        var upTick = this.state.response[2] >= lastClose;
 
         var content = <div></div>;
         
@@ -64,14 +74,16 @@ class Stock extends Component {
                 <div className="delineator"></div>
                 <br/>
                 <table className="predictionTable">
-                    <tr>
-                        <td><span><p>LAST CLOSE (USD)</p></span></td>
-                        <td><span><p>PREDICTED CLOSE (USD)</p></span></td>
-                    </tr>
-                    <tr>
-                        <td className="lastClose">{ Math.round(previousAdjClose * 100)/100 }</td>
-                        <td className="upPrediction">{ Math.round(this.state.response[2] * 100)/100 }</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td><span><p>LAST CLOSE (USD)</p></span></td>
+                            <td><span><p>PREDICTED CLOSE (USD)</p></span></td>
+                        </tr>
+                        <tr>
+                            <td className="lastClose">{ Math.round(lastClose * 100)/100 }</td>
+                            <td className="upPrediction">{ Math.round(this.state.response[2] * 100)/100 }</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>;
         }
@@ -87,7 +99,7 @@ class Stock extends Component {
                         <td><span><p>PREDICTED CLOSE (USD)</p></span></td>
                     </tr>
                     <tr>
-                        <td className="lastClose">{ Math.round(previousAdjClose * 100)/100 }</td>
+                        <td className="lastClose">{ Math.round(lastClose * 100)/100 }</td>
                         <td className="downPrediction">{ Math.round(this.state.response[2] * 100)/100 }</td>
                     </tr>
                 </table>
@@ -112,7 +124,6 @@ class Stock extends Component {
     render() {
         const symbol  = this.state.symbol;
         var content = <div></div>;
-        console.log(this.state.state);
 
         // Display loading screen
         if (this.state.state === "loading") {
